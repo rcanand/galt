@@ -29,4 +29,8 @@ class GaltTest < Minitest::Test
     app1 = app app_1
     assert_equal('app_1', app1.name)
   end
+
+  def test_app_must_have_name
+    assert_raises(ArgumentError) { app }
+  end
 end
