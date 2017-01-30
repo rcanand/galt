@@ -33,4 +33,9 @@ class GaltTest < Minitest::Test
   def test_app_must_have_name
     assert_raises(ArgumentError) { app }
   end
+
+  def test_can_use_parens
+    blog_app = app(Blog)
+    assert_equal('Blog', blog_app.name)
+  end
 end
