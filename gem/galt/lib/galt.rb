@@ -9,4 +9,8 @@ module Galt
   def method_missing(meth, *args, &blk)
     meth.to_s
   end
+
+  def Object.const_missing(const_name)
+    const_name.to_s
+  end
 end

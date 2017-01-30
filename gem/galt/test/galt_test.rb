@@ -3,12 +3,25 @@ require 'galt'
 
 class GaltTest < Minitest::Test
   include Galt
+
   def test_that_it_has_a_version_number
     refute_nil ::Galt::VERSION
   end
 
   def test_can_create_empty_app_with_name
     blog_app = app blog
-    assert_equal("blog", blog_app.name)
+    assert_equal('blog', blog_app.name)
+  end
+
+  def test_can_create_empty_app_with_upper_case_name
+    blog_app = app Blog
+    assert_equal('Blog', blog_app.name)
+  end
+
+  def test_can_create_multiple_apps
+    app1 = app App1
+    app2 = app App2
+    assert_equal('App1', app1.name)
+    assert_equal('App2', app2.name)
   end
 end
