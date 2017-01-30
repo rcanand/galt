@@ -1,3 +1,4 @@
+# A Galt app
 class App
   attr_accessor :name
   def initialize(app_name)
