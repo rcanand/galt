@@ -24,4 +24,9 @@ class GaltTest < Minitest::Test
     assert_equal('App1', app1.name)
     assert_equal('App2', app2.name)
   end
+
+  def test_can_create_app_with_underscore_in_name
+    app1 = app app_1
+    assert_equal('app_1', app1.name)
+  end
 end
