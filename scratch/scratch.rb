@@ -70,3 +70,9 @@
 # include MyModule
 
 # app Blog
+
+def foo
+  puts name
+end
+
+foo

@@ -105,4 +105,12 @@ class GaltTest < Minitest::Test
     assert_equal('Post', blog.items[0].name)
     assert_equal('Profile', blog.items[1].name)
   end
+
+  def test_name_is_a_valid_name
+    # the need for passing name as a string 
+    # is due to MiniTest hijacking name as a keyword
+    # in other contexts, `app name` should work just fine
+    name_app = app('name')
+    assert_equal('name', name_app.name)
+  end
 end
