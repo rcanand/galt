@@ -141,4 +141,32 @@ class GaltTest < Minitest::Test
     assert_equal(:string, blog.items.first.fields.first.type)
     assert_equal('Title', blog.items.first.fields.first.name)
   end
+
+  def test_field_cannot_have_longer_hash
+    assert_raises(ArgumentError) do
+      app Blog do
+        item Post do
+          field string:Title, text:Body
+        end
+      end
+    end
+  end
+
+  def test_full_blog_app
+    blog = app Blog do
+      item Post do
+        field string:Title
+        field text:Body
+      end
+    end
+
+    assert_equal('Blog', blog.name)
+    refute_empty(blog.items)
+    assert_equal('Post', blog.items[0].name)
+    refute_empty(blog.items[0].fields)
+    assert_equal(:string, blog.items[0].fields[0].type)
+    assert_equal('Title', blog.items[0].fields[0].name)
+    assert_equal(:text, blog.items[0].fields[1].type)
+    assert_equal('Body', blog.items[0].fields[1].name)
+  end
 end
