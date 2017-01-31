@@ -126,4 +126,19 @@ class GaltTest < Minitest::Test
     assert_equal('Post', blog_app.items[0].name)
     assert_equal('Comment', blog_app.items[0].children.first.name)
   end
+
+  def test_field_can_have_type
+    blog = app Blog do
+      item Post do
+        field string:Title
+      end
+    end
+
+    assert_equal('Blog', blog.name)
+    refute_empty(blog.items)
+    assert_equal('Post', blog.items.first.name)
+    refute_empty(blog.items.first.fields)
+    assert_equal(:string, blog.items.first.fields.first.type)
+    assert_equal('Title', blog.items.first.fields.first.name)
+  end
 end

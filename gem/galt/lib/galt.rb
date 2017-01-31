@@ -31,10 +31,11 @@ module Galt
     @item
   end
 
-  def field(field_name)
+  def field(field_name_or_hash)
     @context ||= nil
     raise 'cannot create a field without item' unless field_context?(@context)
-    @field = Field.new(field_name)
+
+    @field = Field.new(field_name_or_hash)
     @context.context_object.instance_eval('fields') << @field
   end
 
