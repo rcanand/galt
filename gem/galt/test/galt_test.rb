@@ -50,6 +50,18 @@ class GaltTest < Minitest::Test
     assert_equal('Post', blog.items.first.name)
   end
 
+  def test_can_create_app_with_item_with_parens_and_curly_braces
+    blog = app(Blog) { item Post }
+
+    assert_equal('Blog', blog.name)
+    refute_empty(blog.items)
+    assert_equal('Post', blog.items.first.name)
+  end
+
+  def test_cannot_create_app_with_item_with_curly_braces_without_parens
+    assert_raises(ArgumentError) { app Blog { item Post } }
+  end
+
   def test_cannot_create_standalone_item
     assert_raises(RuntimeError) { item Post }
   end

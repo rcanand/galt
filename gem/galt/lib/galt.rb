@@ -15,7 +15,8 @@ module Galt
     eval('@app.items', @context) << Item.new(item_name)
   end
 
-  def method_missing(method_name, *_args, &_blk)
+  def method_missing(method_name)
+    raise ArgumentError, 'Cannot pass a block to name' if block_given?
     method_name.to_s || super
   end
 
@@ -24,6 +25,7 @@ module Galt
   end
 
   def Object.const_missing(const_name)
+    raise ArgumentError, 'Cannot pass a block to name' if block_given?
     const_name.to_s
   end
 end
