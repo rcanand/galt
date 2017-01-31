@@ -85,4 +85,12 @@ class GaltTest < Minitest::Test
     assert_equal(:string, blog.items.first.fields.first.type)
     assert_equal('Title', blog.items.first.fields.first.name)
   end
+
+  def test_app_cannot_contain_field
+    assert_raises(RuntimeError) do
+      app Blog do
+        field Title
+      end
+    end
+  end
 end

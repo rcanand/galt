@@ -4,25 +4,27 @@ require 'galt/version'
 module Galt
   def app(app_name)
     @app = App.new(app_name)
-    @context = binding
+    @context = { type: :app, binding: binding }
     yield if block_given?
     @context = nil
     @app
   end
 
   def item(item_name)
-    raise 'cannot create an item without parent' if @context.nil?
+    raise 'cannot create an item without parent' if @context.nil? ||
+                                                    @context[:type] != :app
     @item = Item.new(item_name)
-    eval('@app.items', @context) << @item
-    @context = binding
+    eval('@app.items', @context[:binding]) << @item
+    @context = { type: :item, binding: binding }
     yield if block_given?
     @context = nil
   end
 
   def field(field_name)
-    raise 'cannot create a field without item' if @context.nil?
+    raise 'cannot create a field without item' if @context.nil? ||
+                                                  @context[:type] != :item
     @field = Field.new(field_name)
-    eval('@item.fields', @context) << @field
+    eval('@item.fields', @context[:binding]) << @field
   end
 
   def method_missing(method_name)
