@@ -1,4 +1,5 @@
 module Galt
+  # context for DSL state manipulation
   class Context
     attr_accessor :context_type, :context_binding, :context_object
     def initialize(ctype, cbinding, cobject)

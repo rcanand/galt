@@ -16,9 +16,8 @@ module Galt
   end
 
   def item(item_name)
-    raise 'cannot create an item without parent' if !defined?(@context) ||
-                                                    @context.nil? ||
-                                                    ![:app, :item].include?(@context.context_type)
+    @context ||= nil
+    raise 'cannot create an item without parent' unless valid_item_context?(@context)
     @item = Item.new(item_name)
     if @context.context_type == :app
       @context.context_object.instance_eval('items') << @item
@@ -36,11 +35,22 @@ module Galt
   end
 
   def field(field_name)
-    raise 'cannot create a field without item' if !defined?(@context) ||
-                                                  @context.nil? ||
-                                                  @context.context_type != :item
+    @context ||= nil
+    raise 'cannot create a field without item' unless valid_field_context?(@context)
     @field = Field.new(field_name)
     @context.context_object.instance_eval('fields') << @field
+  end
+
+  def valid_item_context?(context)
+    defined?(context) &&
+    !@context.nil? &&
+    [:app, :item].include?(context.context_type)
+  end
+
+  def valid_field_context?(context)
+    defined?(context) &&
+    !context.nil? &&
+    context.context_type == :item
   end
 
   def method_missing(method_name)
