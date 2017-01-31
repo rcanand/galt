@@ -19,11 +19,8 @@ module Galt
     @context ||= nil
     raise 'cannot create an item without parent' unless item_context?(@context)
     @item = Item.new(item_name)
-    if @context.context_type == :app
-      @context.context_object.instance_eval('items') << @item
-    else
-      @context.context_object.instance_eval('children') << @item
-    end
+
+    add_item_to_context(@context, @item)
 
     if block_given?
       old_context = @context
@@ -51,6 +48,14 @@ module Galt
     defined?(context) &&
       !context.nil? &&
       context.context_type == :item
+  end
+
+  def add_item_to_context(context, item)
+    if context.context_type == :app
+      context.context_object.instance_eval('items') << item
+    else
+      context.context_object.instance_eval('children') << item
+    end
   end
 
   def method_missing(method_name)
