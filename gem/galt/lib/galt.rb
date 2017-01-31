@@ -8,7 +8,7 @@ module Galt
     if block_given?
       old_context = nil
       old_context = @context if defined?(@context)
-      @context = { type: :app, binding: binding, object: @app }
+      @context = Context.new(:app, binding, @app)
       yield
       @context = old_context
     end
@@ -18,17 +18,17 @@ module Galt
   def item(item_name)
     raise 'cannot create an item without parent' if !defined?(@context) ||
                                                     @context.nil? ||
-                                                    ![:app, :item].include?(@context[:type])
+                                                    ![:app, :item].include?(@context.context_type)
     @item = Item.new(item_name)
-    if @context[:type] == :app
-      @context[:object].instance_eval('items') << @item
+    if @context.context_type == :app
+      @context.context_object.instance_eval('items') << @item
     else
-      @context[:object].instance_eval('children') << @item
+      @context.context_object.instance_eval('children') << @item
     end
 
     if block_given?
       old_context = @context
-      @context = { type: :item, binding: binding, object: @item }
+      @context = Context.new(:item, binding, @item)
       yield
       @context = old_context
     end
@@ -38,9 +38,9 @@ module Galt
   def field(field_name)
     raise 'cannot create a field without item' if !defined?(@context) ||
                                                   @context.nil? ||
-                                                  @context[:type] != :item
+                                                  @context.context_type != :item
     @field = Field.new(field_name)
-    eval('@item.fields', @context[:binding]) << @field
+    @context.context_object.instance_eval('fields') << @field
   end
 
   def method_missing(method_name)
@@ -61,3 +61,4 @@ end
 require 'galt/app'
 require 'galt/item'
 require 'galt/field'
+require 'galt/context'
