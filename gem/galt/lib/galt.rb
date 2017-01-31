@@ -11,7 +11,7 @@ module Galt
   end
 
   def item(item_name)
-    raise RuntimeError, 'cannot create an item without parent' if @context.nil?
+    raise 'cannot create an item without parent' if @context.nil?
     eval('@app.items', @context) << Item.new(item_name)
   end
 
