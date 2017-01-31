@@ -5,12 +5,13 @@ module Galt
   def app(app_name)
     @app = App.new(app_name)
 
-    old_context = nil
-    old_context = @context if defined?(@context)
-
-    @context = { type: :app, binding: binding }
-    yield if block_given?
-    @context = old_context
+    if block_given?
+      old_context = nil
+      old_context = @context if defined?(@context)
+      @context = { type: :app, binding: binding }
+      yield
+      @context = old_context
+    end
     @app
   end
 
@@ -20,10 +21,13 @@ module Galt
                                                     @context[:type] != :app
     @item = Item.new(item_name)
     eval('@app.items', @context[:binding]) << @item
-    old_context = @context
-    @context = { type: :item, binding: binding }
-    yield if block_given?
-    @context = old_context
+    if block_given?
+      old_context = @context
+      @context = { type: :item, binding: binding }
+      yield
+      @context = old_context
+    end
+    @item
   end
 
   def field(field_name)
