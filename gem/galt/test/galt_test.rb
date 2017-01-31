@@ -49,4 +49,13 @@ class GaltTest < Minitest::Test
     refute_empty(blog.items)
     assert_equal('Post', blog.items.first.name)
   end
+
+  def test_cannot_create_standalone_item
+    assert_raises(RuntimeError) { item Post }
+  end
+
+  def test_cannot_create_item_right_after_app
+    app Blog
+    assert_raises(RuntimeError) { item Post }
+  end
 end

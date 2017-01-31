@@ -4,13 +4,15 @@ require 'galt/version'
 module Galt
   def app(app_name)
     @app = App.new(app_name)
+    @context = binding
     yield if block_given?
+    @context = nil
     @app
   end
 
   def item(item_name)
-    raise RuntimeError, 'cannot create an item without an app' if @app.nil?
-    @app.items << Item.new(item_name)
+    raise RuntimeError, 'cannot create an item without parent' if @context.nil?
+    eval('@app.items', @context) << Item.new(item_name)
   end
 
   def method_missing(method_name, *_args, &_blk)
