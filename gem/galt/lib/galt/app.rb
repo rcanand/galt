@@ -1,5 +1,5 @@
 # A Galt app
-class App
+class Galt::App
   attr_accessor :name, :items
   def initialize(app_name)
     @name = app_name

@@ -1,6 +1,4 @@
 require 'galt/version'
-require 'app'
-require 'item'
 
 # Galt: Generic application layout template
 module Galt
@@ -27,3 +25,6 @@ module Galt
     const_name.to_s
   end
 end
+
+require 'galt/app'
+require 'galt/item'
