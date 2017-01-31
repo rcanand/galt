@@ -1,10 +1,18 @@
 require 'galt/version'
 require 'app'
+require 'item'
 
-# Galt stands for Generic application layout template
+# Galt: Generic application layout template
 module Galt
   def app(app_name)
     @app = App.new(app_name)
+    yield if block_given?
+    @app
+  end
+
+  def item(item_name)
+    raise RuntimeError, 'cannot create an item without an app' if @app.nil?
+    @app.items << Item.new(item_name)
   end
 
   def method_missing(method_name, *_args, &_blk)
