@@ -113,4 +113,17 @@ class GaltTest < Minitest::Test
     name_app = app('name')
     assert_equal('name', name_app.name)
   end
+
+  def test_item_can_contain_nested_item
+    blog_app = app Blog do
+      item Post do
+        item Comment
+      end
+    end
+
+    assert_equal('Blog', blog_app.name)
+    refute_empty(blog_app.items)
+    assert_equal('Post', blog_app.items[0].name)
+    assert_equal('Comment', blog_app.items[0].children.first.name)
+  end
 end

@@ -8,7 +8,7 @@ module Galt
     if block_given?
       old_context = nil
       old_context = @context if defined?(@context)
-      @context = { type: :app, binding: binding }
+      @context = { type: :app, binding: binding, object: @app }
       yield
       @context = old_context
     end
@@ -18,12 +18,17 @@ module Galt
   def item(item_name)
     raise 'cannot create an item without parent' if !defined?(@context) ||
                                                     @context.nil? ||
-                                                    @context[:type] != :app
+                                                    ![:app, :item].include?(@context[:type])
     @item = Item.new(item_name)
-    eval('@app.items', @context[:binding]) << @item
+    if @context[:type] == :app
+      @context[:object].instance_eval('items') << @item
+    else
+      @context[:object].instance_eval('children') << @item
+    end
+
     if block_given?
       old_context = @context
-      @context = { type: :item, binding: binding }
+      @context = { type: :item, binding: binding, object: @item }
       yield
       @context = old_context
     end
