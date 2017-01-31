@@ -93,4 +93,16 @@ class GaltTest < Minitest::Test
       end
     end
   end
+
+  def test_app_can_contain_multiple_items
+    blog = app Blog do
+      item Post
+      item Profile
+    end
+
+    assert_equal('Blog', blog.name)
+    refute_empty(blog.items)
+    assert_equal('Post', blog.items[0].name)
+    assert_equal('Profile', blog.items[1].name)
+  end
 end
