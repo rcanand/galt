@@ -12,7 +12,17 @@ module Galt
 
   def item(item_name)
     raise 'cannot create an item without parent' if @context.nil?
-    eval('@app.items', @context) << Item.new(item_name)
+    @item = Item.new(item_name)
+    eval('@app.items', @context) << @item
+    @context = binding
+    yield if block_given?
+    @context = nil
+  end
+
+  def field(field_name)
+    raise 'cannot create a field without item' if @context.nil?
+    @field = Field.new(field_name)
+    eval('@item.fields', @context) << @field
   end
 
   def method_missing(method_name)
@@ -32,3 +42,4 @@ end
 
 require 'galt/app'
 require 'galt/item'
+require 'galt/field'

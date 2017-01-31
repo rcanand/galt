@@ -70,4 +70,19 @@ class GaltTest < Minitest::Test
     app Blog
     assert_raises(RuntimeError) { item Post }
   end
+
+  def test_can_create_app_with_item_and_field
+    blog = app Blog do
+      item Post do
+        field Title
+      end
+    end
+
+    assert_equal('Blog', blog.name)
+    refute_empty(blog.items)
+    assert_equal('Post', blog.items.first.name)
+    refute_empty(blog.items.first.fields)
+    assert_equal(:string, blog.items.first.fields.first.type)
+    assert_equal('Title', blog.items.first.fields.first.name)
+  end
 end
