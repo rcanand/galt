@@ -107,7 +107,7 @@ class GaltTest < Minitest::Test
   end
 
   def test_name_is_a_valid_name
-    # the need for passing name as a string 
+    # the need for passing name as a string
     # is due to MiniTest hijacking name as a keyword
     # in other contexts, `app name` should work just fine
     name_app = app('name')
