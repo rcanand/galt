@@ -153,12 +153,12 @@ class GaltTest < Minitest::Test
   end
 
   def test_full_blog_app
-    blog = app Blog do
-      item Post do
+    blog = app Blog {
+      item Post {
         field string:Title
         field text:Body
-      end
-    end
+      }
+    }
 
     assert_equal('Blog', blog.name)
     refute_empty(blog.items)
